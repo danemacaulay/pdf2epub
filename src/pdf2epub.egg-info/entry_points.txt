@@ -1,0 +1,2 @@
+[console_scripts]
+pdf2epub = pdf2epub.cli:main

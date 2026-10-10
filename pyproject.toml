@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf2epub"
+version = "0.1.0"
+description = "Convert PDFs to reflowable EPUBs via Marker + Pandoc"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "marker-pdf>=2.0.0",
+  "pypdf>=5.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+pdf2epub = "pdf2epub.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

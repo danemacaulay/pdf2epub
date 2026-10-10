@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/pdf2epub/__init__.py
+src/pdf2epub.egg-info/PKG-INFO
+src/pdf2epub.egg-info/SOURCES.txt
+src/pdf2epub.egg-info/dependency_links.txt
+src/pdf2epub.egg-info/entry_points.txt
+src/pdf2epub.egg-info/requires.txt
+src/pdf2epub.egg-info/top_level.txt
+tests/test_smoke_import.py
