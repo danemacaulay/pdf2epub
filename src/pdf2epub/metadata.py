@@ -105,7 +105,7 @@ def resolve_metadata(
         title = title_override
     elif pdf_meta.title:
         title = pdf_meta.title
-    elif md_meta.title and md_meta.title != "Untitled" and md_meta.author is not None:
+    elif md_meta.title and md_meta.title != "Untitled":
         title = md_meta.title
     else:
         title = pdf_path.stem

@@ -77,5 +77,5 @@ def test_resolve_priority_cli_over_pdf_over_md(tmp_path: Path):
     assert from_md.author and "Ilya" in from_md.author
 
     from_name = resolve_metadata(pdf_path=empty_pdf, markdown="# No author here\n\nBody.\n")
-    assert from_name.title == "paper"
+    assert from_name.title == "No author here"
     assert from_name.author is None
