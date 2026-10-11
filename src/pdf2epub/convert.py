@@ -5,6 +5,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
+from pdf2epub.citations import link_citations
 from pdf2epub.deps import (
     check_conversion_deps,
     require_marker_single,
@@ -22,6 +23,7 @@ class ConvertOptions:
     fast: bool = False
     keep: bool = False
     work_dir: Path | None = None
+    link_citations: bool = True
 
 
 def default_out_path(pdf_path: Path) -> Path:
@@ -99,9 +101,17 @@ def convert_pdf(opts: ConvertOptions) -> Path:
             title_override=opts.title,
             author_override=opts.author,
         )
+        pandoc_input = md_path
+        if opts.link_citations:
+            linked = link_citations(markdown)
+            if linked != markdown:
+                # Keep it beside the original so pandoc's resource path still
+                # resolves Marker's extracted images.
+                pandoc_input = md_path.with_name(f"{md_path.stem}.linked.md")
+                pandoc_input.write_text(linked, encoding="utf-8")
         out_path.parent.mkdir(parents=True, exist_ok=True)
         pandoc_cmd = build_pandoc_cmd(
-            pandoc=pandoc, md_path=md_path, epub_path=out_path, meta=meta
+            pandoc=pandoc, md_path=pandoc_input, epub_path=out_path, meta=meta
         )
         proc2 = subprocess.run(pandoc_cmd, capture_output=True, text=True)
         if proc2.returncode != 0:

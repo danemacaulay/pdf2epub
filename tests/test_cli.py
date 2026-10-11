@@ -21,6 +21,17 @@ def test_cli_parses_flags(tmp_path: Path):
     assert opts.fast is True
     assert opts.keep is True
     assert opts.out_path == out
+    assert opts.link_citations is True
+
+
+def test_cli_no_link_citations_flag(tmp_path: Path):
+    pdf = tmp_path / "a.pdf"
+    pdf.write_bytes(b"%PDF")
+    with patch("pdf2epub.cli.convert_pdf", return_value=tmp_path / "a.epub") as conv:
+        code = main([str(pdf), "--no-link-citations"])
+    assert code == 0
+    opts: ConvertOptions = conv.call_args.args[0]
+    assert opts.link_citations is False
 
 
 def test_cli_missing_dep_prints_hint(tmp_path: Path, capsys):

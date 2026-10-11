@@ -27,6 +27,12 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Keep intermediate Marker markdown/images beside the PDF",
     )
+    p.add_argument(
+        "--no-link-citations",
+        dest="link_citations",
+        action="store_false",
+        help="Don't link numeric citations ([12], superscripts) to reference entries",
+    )
     return p
 
 
@@ -44,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
         author=args.author,
         fast=args.fast,
         keep=args.keep,
+        link_citations=args.link_citations,
     )
     try:
         out = convert_pdf(opts)

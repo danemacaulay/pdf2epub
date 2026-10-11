@@ -31,9 +31,16 @@ pdf2epub paper.pdf --out ~/Books/paper.epub
 pdf2epub paper.pdf --title "My Title" --author "Ada Lovelace"
 pdf2epub paper.pdf --fast
 pdf2epub paper.pdf --keep   # keeps Marker markdown beside the PDF
+pdf2epub paper.pdf --no-link-citations
 ```
 
 Metadata priority: `--title`/`--author` → PDF info → first-page heuristics → filename.
+
+Numeric citations (`[12]`, `[3, 5]`, `[1–4]`, `<sup>12</sup>`) are linked to their
+entries in the References/Bibliography section as `epub:type="biblioref"` →
+`biblioentry`, so readers with note popups (Readest, Apple Books) show the
+reference on tap. Only numbers with a matching entry are linked; author–year
+papers are left untouched. Use `--no-link-citations` to disable.
 
 ## Tests
 
