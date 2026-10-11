@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from pdf2epub.citations import link_citations
+from pdf2epub.cover import generate_cover_image
 from pdf2epub.deps import (
     check_conversion_deps,
     require_marker_single,
@@ -48,6 +49,7 @@ def build_pandoc_cmd(
     md_path: Path,
     epub_path: Path,
     meta: BookMeta,
+    cover_path: Path | None = None,
 ) -> list[str]:
     cmd = [
         str(pandoc),
@@ -61,6 +63,8 @@ def build_pandoc_cmd(
     ]
     if meta.author:
         cmd.append(f"--metadata=author:{meta.author}")
+    if cover_path is not None:
+        cmd.append(f"--epub-cover-image={cover_path}")
     return cmd
 
 
@@ -110,8 +114,17 @@ def convert_pdf(opts: ConvertOptions) -> Path:
                 pandoc_input = md_path.with_name(f"{md_path.stem}.linked.md")
                 pandoc_input.write_text(linked, encoding="utf-8")
         out_path.parent.mkdir(parents=True, exist_ok=True)
+        cover_path = generate_cover_image(
+            work / "cover.jpg",
+            title=meta.title,
+            author=meta.author,
+        )
         pandoc_cmd = build_pandoc_cmd(
-            pandoc=pandoc, md_path=pandoc_input, epub_path=out_path, meta=meta
+            pandoc=pandoc,
+            md_path=pandoc_input,
+            epub_path=out_path,
+            meta=meta,
+            cover_path=cover_path,
         )
         proc2 = subprocess.run(pandoc_cmd, capture_output=True, text=True)
         if proc2.returncode != 0:
